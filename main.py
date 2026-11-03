@@ -20,4 +20,16 @@ if not VK_TOKEN or not AI_API_KEY:
 # Подключение к ВКонтакте
 vk_session = vk_api.VkApi(token=VK_TOKEN)
 longpoll = VkLongPoll(vk_session)
-vk = vk_session.get_api()
+vk = vk_session.get_api() 
+from ddgs import DDGS
+
+
+def search_internet(query):
+    """Поиск свежей информации в интернете"""
+    try:
+        with DDGS() as ddgs:
+            results = [r["body"] for r in ddgs.text(query, max_results=3)]
+        return "\n".join(results)
+    except Exception as e:
+        print(f"[!] Ошибка поиска: {e}")
+        return "Не удалось получить свежие данные из сети."
